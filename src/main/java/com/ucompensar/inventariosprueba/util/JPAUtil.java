@@ -7,29 +7,27 @@ package com.ucompensar.inventariosprueba.util;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
- 
+
 public class JPAUtil {
- 
-    private static final String PERSISTENCE_UNIT = "dbinventarioprueba";
-    private static EntityManagerFactory emf;
- 
-    private JPAUtil() {
+
+    //variable para conectar EntityManager con la unidad de persistencia
+    private static final EntityManagerFactory factory =
+            Persistence.createEntityManagerFactory("dbinventarioprueba");
+
+    //conexion
+    public static EntityManagerFactory getEntityManagerFactory() {
+        return factory;
     }
- 
-    public static synchronized EntityManagerFactory getEntityManagerFactory() {
-        if (emf == null || !emf.isOpen()) {
-            emf = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT);
-        }
-        return emf;
-    }
- 
+
+    //atajo para obtener un EntityManager
     public static EntityManager getEntityManager() {
-        return getEntityManagerFactory().createEntityManager();
+        return factory.createEntityManager();
     }
- 
-    public static synchronized void close() {
-        if (emf != null && emf.isOpen()) {
-            emf.close();
+
+    //Desconectar
+    public static void shutdown() {
+        if (factory != null && factory.isOpen()) {
+            factory.close();
         }
     }
 }

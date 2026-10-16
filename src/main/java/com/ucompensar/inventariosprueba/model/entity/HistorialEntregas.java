@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.ucompensar.inventariosprueba.model.entity;
 
 import jakarta.persistence.*;
@@ -11,14 +7,19 @@ import java.time.LocalDateTime;
 @Table(name = "historial_entregas")
 public class HistorialEntregas {
 
+    @Id // CORREGIDO: Faltaba la anotación @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // CORREGIDO: Faltaba generación
     private Long idHistorialEntregas;
 
+    // CORREGIDO: El diagrama indica relación con Pedido, no con Producto
     @ManyToOne
-    @JoinColumn(name = "id_producto", nullable = false)
-    private Productos producto;
+    @JoinColumn(name = "id_pedido", nullable = false)
+    private Pedidos pedido;
     
     private LocalDateTime fechaEntrega;
     private String estadoEntrega;
+
+    // Getters y Setters
 
     public Long getIdHistorialEntregas() {
         return idHistorialEntregas;
@@ -28,12 +29,12 @@ public class HistorialEntregas {
         this.idHistorialEntregas = idHistorialEntregas;
     }
 
-    public Productos getProducto() {
-        return producto;
+    public Pedidos getPedido() {
+        return pedido;
     }
 
-    public void setProducto(Productos producto) {
-        this.producto = producto;
+    public void setPedido(Pedidos pedido) {
+        this.pedido = pedido;
     }
 
     public LocalDateTime getFechaEntrega() {
@@ -51,6 +52,6 @@ public class HistorialEntregas {
     public void setEstadoEntrega(String estadoEntrega) {
         this.estadoEntrega = estadoEntrega;
     }
-    
+
     
 }

@@ -1,14 +1,10 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.ucompensar.inventariosprueba.model.entity;
 
 import jakarta.persistence.*;
-
+import java.util.List;
 
 @Entity
-@Table(name ="cliente")
+@Table(name = "cliente")
 public class Clientes {
     
     @Id 
@@ -17,10 +13,16 @@ public class Clientes {
     
     private String nombre;
     private String direccion;
-    private Integer telefono;
-    private String correo;
+    private String telefono; // CORREGIDO: String según diagrama
     
+    @Column(name = "email") // El diagrama dice email, tu código decía correo
+    private String email; 
+    
+    // CORREGIDO: La anotación estaba suelta y faltaba la lista
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
+    private List<Pedidos> pedidos;
+
+    // Getters y Setters
 
     public Long getIdCliente() {
         return idCliente;
@@ -46,19 +48,29 @@ public class Clientes {
         this.direccion = direccion;
     }
 
-    public Integer getTelefono() {
+    public String getTelefono() {
         return telefono;
     }
 
-    public void setTelefono(Integer telefono) {
+    public void setTelefono(String telefono) {
         this.telefono = telefono;
     }
 
-    public String getCorreo() {
-        return correo;
+    public String getEmail() {
+        return email;
     }
 
-    public void setCorreo(String correo) {
-        this.correo = correo;
-    }   
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public List<Pedidos> getPedidos() {
+        return pedidos;
+    }
+
+    public void setPedidos(List<Pedidos> pedidos) {
+        this.pedidos = pedidos;
+    }
+
+    
 }

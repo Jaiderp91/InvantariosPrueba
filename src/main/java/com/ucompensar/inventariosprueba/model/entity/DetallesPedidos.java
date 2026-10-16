@@ -1,14 +1,9 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.ucompensar.inventariosprueba.model.entity;
 
 import jakarta.persistence.*;
 
-
 @Entity
-@Table (name ="detalle_pedido")
+@Table(name = "detalle_pedido")
 public class DetallesPedidos {
     
     @Id
@@ -24,6 +19,8 @@ public class DetallesPedidos {
     private Productos producto;    
 
     private Integer cantidad;
+
+    // Getters y Setters
 
     public Long getIdDetallePedido() {
         return idDetallePedido;
@@ -56,4 +53,6 @@ public class DetallesPedidos {
     public void setCantidad(Integer cantidad) {
         this.cantidad = cantidad;
     }
+
+    
 }

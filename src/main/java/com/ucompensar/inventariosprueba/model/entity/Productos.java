@@ -1,18 +1,10 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.ucompensar.inventariosprueba.model.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-
+import jakarta.persistence.*;
+import java.math.BigDecimal; // CORREGIDO: Import para BigDecimal
 
 @Entity
-@Table(name = "productos")
+@Table(name = "producto") // CORREGIDO: Singular para consistencia
 public class Productos {
     
     @Id
@@ -21,8 +13,18 @@ public class Productos {
     
     private String nombre;
     private String descripcion;
-    private Double precio;
+    
+    // CORREGIDO: BigDecimal es el estándar para precios
+    private BigDecimal precio; 
+    
     private Integer stock;
+
+    // CORREGIDO: Falta la relación con Proveedor según el diagrama
+    @ManyToOne
+    @JoinColumn(name = "id_proveedor", nullable = false)
+    private Proveedores proveedor;
+
+    // Getters y Setters
 
     public Long getIdProducto() {
         return idProducto;
@@ -48,11 +50,11 @@ public class Productos {
         this.descripcion = descripcion;
     }
 
-    public Double getPrecio() {
+    public BigDecimal getPrecio() {
         return precio;
     }
 
-    public void setPrecio(Double precio) {
+    public void setPrecio(BigDecimal precio) {
         this.precio = precio;
     }
 
@@ -63,5 +65,14 @@ public class Productos {
     public void setStock(Integer stock) {
         this.stock = stock;
     }
+
+    public Proveedores getProveedor() {
+        return proveedor;
+    }
+
+    public void setProveedor(Proveedores proveedor) {
+        this.proveedor = proveedor;
+    }
+
     
 }

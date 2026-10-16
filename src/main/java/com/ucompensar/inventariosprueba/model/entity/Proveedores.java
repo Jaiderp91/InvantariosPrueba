@@ -1,14 +1,10 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.ucompensar.inventariosprueba.model.entity;
 
 import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-@Table (name = "proveedor")
+@Table(name = "proveedor")
 public class Proveedores {
     
     @Id
@@ -17,10 +13,12 @@ public class Proveedores {
     
     private String nombre;
     private String contacto;
-    private Integer telefono;
+    private String telefono; // CORREGIDO: Diagrama dice String, no Integer
     
     @OneToMany(mappedBy = "proveedor")
-    private List<Productos> pproducto;
+    private List<Productos> productos; // CORREGIDO: Nombre de variable en plural y coherente
+
+    // Getters y Setters
 
     public Long getIdProveedor() {
         return idProveedor;
@@ -46,20 +44,20 @@ public class Proveedores {
         this.contacto = contacto;
     }
 
-    public Integer getTelefono() {
+    public String getTelefono() {
         return telefono;
     }
 
-    public void setTelefono(Integer telefono) {
+    public void setTelefono(String telefono) {
         this.telefono = telefono;
     }
 
-    public List<Productos> getPproducto() {
-        return pproducto;
+    public List<Productos> getProductos() {
+        return productos;
     }
 
-    public void setPproducto(List<Productos> pproducto) {
-        this.pproducto = pproducto;
+    public void setProductos(List<Productos> productos) {
+        this.productos = productos;
     }
     
     

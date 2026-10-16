@@ -1,15 +1,11 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.ucompensar.inventariosprueba.model.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-
+import java.util.List;
 
 @Entity
-@Table(name ="pedido")
+@Table(name = "pedido")
 public class Pedidos {
     
     @Id
@@ -21,7 +17,15 @@ public class Pedidos {
     private Clientes cliente;
     
     private LocalDateTime fechaPedido;
-    private String pedido; // pendiente avaluar si se crea tabla 
+    
+    // CORREGIDO: El diagrama dice "estado", no "pedido"
+    private String estado; 
+
+    // CORREGIDO: Falta la relación inversa con DetallePedido
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
+    private List<DetallesPedidos> detalles;
+
+    // Getters y Setters
 
     public Long getIdPedido() {
         return idPedido;
@@ -47,13 +51,21 @@ public class Pedidos {
         this.fechaPedido = fechaPedido;
     }
 
-    public String getPedido() {
-        return pedido;
+    public String getEstado() {
+        return estado;
     }
 
-    public void setPedido(String pedido) {
-        this.pedido = pedido;
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
-    
+
+    public List<DetallesPedidos> getDetalles() {
+        return detalles;
+    }
+
+    public void setDetalles(List<DetallesPedidos> detalles) {
+        this.detalles = detalles;
+    }
+
     
 }
