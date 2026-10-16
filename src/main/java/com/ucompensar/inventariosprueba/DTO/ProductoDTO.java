@@ -1,36 +1,35 @@
 package com.ucompensar.inventariosprueba.DTO;
 
+
 import java.math.BigDecimal;
 
 public class ProductoDTO {
-    
-    private Long id;
+
+    private Long idProducto;
     private String nombre;
     private String descripcion;
     private BigDecimal precio;
     private Integer stock;
     private Long idProveedor;
-    private String nombreProveedor;
 
-    // constructor
-    public ProductoDTO(Long id, String nombre, String descripcion, BigDecimal precio, Integer stock, Long idProveedor, String nombreProveedor) {
-        this.id = id;
+    public ProductoDTO() {
+    }
+
+    public ProductoDTO(Long idProducto, String nombre, String descripcion, BigDecimal precio, Integer stock, Long idProveedor) {
+        this.idProducto = idProducto;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.precio = precio;
         this.stock = stock;
         this.idProveedor = idProveedor;
-        this.nombreProveedor = nombreProveedor;
     }
 
-    // getters and setters
-
-    public Long getId() {
-        return id;
+    public Long getIdProducto() {
+        return idProducto;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setIdProducto(Long idProducto) {
+        this.idProducto = idProducto;
     }
 
     public String getNombre() {
@@ -72,14 +71,4 @@ public class ProductoDTO {
     public void setIdProveedor(Long idProveedor) {
         this.idProveedor = idProveedor;
     }
-
-    public String getNombreProveedor() {
-        return nombreProveedor;
-    }
-
-    public void setNombreProveedor(String nombreProveedor) {
-        this.nombreProveedor = nombreProveedor;
-    }
-
-    
 }

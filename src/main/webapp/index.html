@@ -3,101 +3,318 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestión de Inventarios - UCompensar</title>
+    <title>Sistema de Gestión de Inventarios</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f6f9; }
-        h1, h2 { color: #333; }
-        .container { display: flex; gap: 20px; flex-wrap: wrap; }
-        .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); width: 45%; min-width: 300px; }
-        input, select, button { width: 100%; padding: 8px; margin: 8px 0; box-sizing: border-box; }
-        button { background-color: #0056b3; color: white; border: none; cursor: pointer; border-radius: 4px; }
-        button:hover { background-color: #003d80; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-        th { background-color: #f2f2f2; }
+        :root {
+            --bg: #f1f5f9;
+            --card: #ffffff;
+            --ink: #0f172a;
+            --muted: #64748b;
+            --line: #e2e8f0;
+            --brand: #4f46e5;
+            --brand-dark: #4338ca;
+            --brand-soft: #eef2ff;
+            --ok: #16a34a;
+            --ok-soft: #dcfce7;
+            --warn: #d97706;
+            --warn-soft: #fef3c7;
+            --bad: #dc2626;
+            --bad-soft: #fee2e2;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--ink);
+        }
+
+        /* ---------- Barra superior ---------- */
+        header {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: #fff;
+            padding: 28px 32px 64px;
+        }
+        header h1 { margin: 0; font-size: 26px; font-weight: 700; letter-spacing: -.3px; }
+        header p  { margin: 6px 0 0; opacity: .85; font-size: 14px; }
+
+        main {
+            max-width: 1200px;
+            margin: -40px auto 40px;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 20px;
+        }
+        .card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 20px rgba(15, 23, 42, .07);
+        }
+        .card.full { grid-column: 1 / -1; }
+        .card h2 {
+            margin: 0 0 4px;
+            font-size: 18px;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .card h2 .ico {
+            width: 34px; height: 34px; border-radius: 10px;
+            background: var(--brand-soft); color: var(--brand);
+            display: grid; place-items: center; font-size: 17px;
+        }
+        .sub { margin: 0 0 18px 44px; color: var(--muted); font-size: 13px; }
+
+        /* ---------- Resumen ---------- */
+        .stats { display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+        .stat {
+            flex: 1; min-width: 120px;
+            background: var(--bg); border-radius: 12px; padding: 12px 14px;
+        }
+        .stat b { display: block; font-size: 22px; }
+        .stat span { font-size: 12px; color: var(--muted); }
+
+        /* ---------- Tablas ---------- */
+        .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; }
+        table { width: 100%; border-collapse: collapse; font-size: 14px; }
+        th {
+            text-align: left; background: #f8fafc; color: var(--muted);
+            font-size: 12px; text-transform: uppercase; letter-spacing: .5px;
+            padding: 12px 14px; border-bottom: 1px solid var(--line);
+        }
+        td { padding: 12px 14px; border-bottom: 1px solid var(--line); }
+        tbody tr:last-child td { border-bottom: none; }
+        tbody tr:hover { background: #f8fafc; }
+        .empty { text-align: center; color: var(--muted); padding: 28px !important; }
+        .num { text-align: right; }
+
+        /* ---------- Etiquetas ---------- */
+        .badge {
+            display: inline-block; padding: 3px 10px; border-radius: 999px;
+            font-size: 12px; font-weight: 600;
+        }
+        .b-ok   { background: var(--ok-soft);   color: var(--ok); }
+        .b-warn { background: var(--warn-soft); color: var(--warn); }
+        .b-bad  { background: var(--bad-soft);  color: var(--bad); }
+        .b-info { background: var(--brand-soft); color: var(--brand); }
+
+        /* ---------- Formularios ---------- */
+        label { display: block; font-size: 13px; font-weight: 600; margin: 14px 0 6px; }
+        select, input {
+            width: 100%; padding: 11px 12px; font-size: 14px;
+            border: 1px solid var(--line); border-radius: 10px;
+            background: #fff; color: var(--ink); font-family: inherit;
+        }
+        select:focus, input:focus {
+            outline: none; border-color: var(--brand);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, .15);
+        }
+        button {
+            width: 100%; margin-top: 18px; padding: 12px;
+            font-size: 14px; font-weight: 600; font-family: inherit;
+            color: #fff; background: var(--brand);
+            border: none; border-radius: 10px; cursor: pointer;
+            transition: background .15s, transform .05s;
+        }
+        button:hover { background: var(--brand-dark); }
+        button:active { transform: scale(.99); }
+        button.ghost {
+            width: auto; margin: 0 0 14px; padding: 8px 14px;
+            background: var(--brand-soft); color: var(--brand);
+        }
+        button.ghost:hover { background: #e0e7ff; }
+
+        .search-row { display: flex; gap: 12px; align-items: end; margin-bottom: 16px; }
+        .search-row > div { flex: 1; }
+        .search-row select { margin: 0; }
+        .search-row label { margin-top: 0; }
+        .search-row button { width: auto; margin: 0; padding: 11px 24px; }
+
+        /* ---------- Mensaje de pedido ---------- */
+        #mensajePedido {
+            margin-top: 14px; padding: 12px 14px; border-radius: 10px;
+            font-size: 14px; font-weight: 600; display: none;
+        }
+        #mensajePedido.ok  { display: block; background: var(--ok-soft);  color: var(--ok); }
+        #mensajePedido.err { display: block; background: var(--bad-soft); color: var(--bad); }
+
+        @media (max-width: 900px) {
+            main { grid-template-columns: 1fr; }
+            .search-row { flex-direction: column; align-items: stretch; }
+        }
     </style>
 </head>
 <body>
 
-    <h1>Sistema de Gestión de Inventarios</h1>
+    <header>
+        <h1>📦 Sistema de Gestión de Inventarios</h1>
+        <p>Consulta el stock, registra pedidos y revisa el historial de entregas. creado por Diego Monroy y Jaider Montoya</p>
+    </header>
 
-    <div class="container">
+    <main>
         <!-- MÓDULO 1: Ver Productos y Stock -->
-        <div class="card">
-            <h2>Inventario de Productos</h2>
-            <button onclick="cargarProductos()">Cargar Productos</button>
-            <table id="tablaProductos">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Nombre</th>
-                        <th>Precio</th>
-                        <th>Stock</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-        </div>
+        <section class="card">
+            <h2><span class="ico">🗂️</span> Inventario de productos</h2>
+            <p class="sub">Stock disponible en tiempo real</p>
+
+            <div class="stats">
+                <div class="stat"><b id="statTotal">0</b><span>Productos</span></div>
+                <div class="stat"><b id="statUnidades">0</b><span>Unidades en stock</span></div>
+                <div class="stat"><b id="statBajo">0</b><span>Con stock bajo</span></div>
+            </div>
+
+            <button class="ghost" onclick="cargarProductos()">↻ Actualizar</button>
+
+            <div class="table-wrap">
+                <table id="tablaProductos">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Producto</th>
+                            <th class="num">Precio</th>
+                            <th class="num">Stock</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td colspan="4" class="empty">Cargando productos…</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
 
         <!-- MÓDULO 2: Crear Pedido (Actualiza Stock) -->
-        <div class="card">
-            <h2>Registrar Nuevo Pedido</h2>
-            <form id="formPedido">
-                <label>ID Cliente:</label>
-                <input type="number" id="idCliente" required>
+        <section class="card">
+            <h2><span class="ico">🛒</span> Registrar nuevo pedido</h2>
+            <p class="sub">El stock se descuenta automáticamente</p>
 
-                <label>ID Producto:</label>
-                <input type="number" id="idProducto" required>
+            <form id="formPedido" onsubmit="return false;">
+                <label for="idCliente">Cliente</label>
+                <select id="idCliente" required></select>
 
-                <label>Cantidad:</label>
-                <input type="number" id="cantidad" required>
+                <label for="idProducto">Producto</label>
+                <select id="idProducto" required></select>
 
-                <button type="button" onclick="registrarPedido()">Crear Pedido y Descontar Stock</button>
+                <label for="cantidad">Cantidad</label>
+                <input type="number" id="cantidad" min="1" placeholder="Ej: 2" required>
+
+                <button type="button" onclick="registrarPedido()">Crear pedido y descontar stock</button>
             </form>
-            <div id="mensajePedido" style="margin-top:10px; font-weight:bold;"></div>
-        </div>
+            <div id="mensajePedido"></div>
+        </section>
 
         <!-- MÓDULO 3: Historial por Cliente -->
-        <div class="card" style="width: 93%;">
-            <h2>Consultar Historial de Entregas por Cliente</h2>
-            <input type="number" id="buscarClienteId" placeholder="Ingrese ID del Cliente">
-            <button onclick="consultarHistorial()">Buscar Historial</button>
-            <table id="tablaHistorial">
-                <thead>
-                    <tr>
-                        <th>ID Entrega</th>
-                        <th>ID Pedido</th>
-                        <th>Fecha Entrega</th>
-                        <th>Estado</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-        </div>
-    </div>
+        <section class="card full">
+            <h2><span class="ico">🚚</span> Historial de entregas por cliente</h2>
+            <p class="sub">Selecciona un cliente para ver sus entregas</p>
+
+            <div class="search-row">
+                <div>
+                    <label for="buscarClienteId">Cliente</label>
+                    <select id="buscarClienteId"></select>
+                </div>
+                <button onclick="consultarHistorial()">Buscar historial</button>
+            </div>
+
+            <div class="table-wrap">
+                <table id="tablaHistorial">
+                    <thead>
+                        <tr>
+                            <th>N° Entrega</th>
+                            <th>N° Pedido</th>
+                            <th>Fecha de entrega</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td colspan="4" class="empty">Elige un cliente y pulsa “Buscar historial”.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
 
     <script>
-        const API_URL = 'http://localhost:8080/inventariosPrueba-1.0-SNAPSHOT/api';
+        // Ruta relativa: funciona con cualquier context path (y evita problemas de CORS)
+        const API_URL = 'resources';
+        const STOCK_BAJO = 10;
+
+        const moneda = new Intl.NumberFormat('es-CO', {
+            style: 'currency', currency: 'COP', maximumFractionDigits: 0
+        });
+
+        // Evita que un texto con símbolos rompa el HTML
+        function esc(t) {
+            return String(t ?? '').replace(/[&<>"']/g, c =>
+                ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        }
+
+        function badgeEstado(estado) {
+            const e = String(estado ?? '').toUpperCase();
+            let clase = 'b-info';
+            if (e === 'ENTREGADO') clase = 'b-ok';
+            else if (e === 'PENDIENTE' || e === 'EN_RUTA' || e === 'EN_CAMINO') clase = 'b-warn';
+            else if (e === 'CANCELADO') clase = 'b-bad';
+            return `<span class="badge ${clase}">${esc(e.replace('_', ' ') || 'N/A')}</span>`;
+        }
+
+        // Rellena las listas desplegables con nombres (el valor sigue siendo el ID)
+        async function cargarListas() {
+            try {
+                const [clientes, productos] = await Promise.all([
+                    fetch(`${API_URL}/clientes`).then(r => r.json()),
+                    fetch(`${API_URL}/productos`).then(r => r.json())
+                ]);
+                const clienteSel = document.getElementById('idCliente').value;
+                const productoSel = document.getElementById('idProducto').value;
+
+                const opcionesClientes = clientes
+                    .map(c => `<option value="${c.idCliente}">${esc(c.nombre)}</option>`).join('');
+                document.getElementById('idCliente').innerHTML = opcionesClientes;
+                document.getElementById('buscarClienteId').innerHTML = opcionesClientes;
+                document.getElementById('idProducto').innerHTML = productos
+                    .map(p => `<option value="${p.idProducto}">${esc(p.nombre)} (stock: ${p.stock})</option>`).join('');
+
+                // conservar la selección del usuario tras refrescar
+                if (clienteSel) document.getElementById('idCliente').value = clienteSel;
+                if (productoSel) document.getElementById('idProducto').value = productoSel;
+            } catch (err) {
+                console.error('Error al cargar listas:', err);
+            }
+        }
 
         // 1. Cargar productos con Fetch API
         async function cargarProductos() {
+            const tbody = document.querySelector('#tablaProductos tbody');
             try {
                 const res = await fetch(`${API_URL}/productos`);
+                if (!res.ok) throw new Error('HTTP ' + res.status);
                 const data = await res.json();
-                const tbody = document.querySelector('#tablaProductos tbody');
-                tbody.innerHTML = '';
-                data.forEach(p => {
-                    tbody.innerHTML += `
-                        <tr>
-                            <td>${p.idProducto}</td>
-                            <td>${p.nombre}</td>
-                            <td>$${p.precio}</td>
-                            <td><strong>${p.stock}</strong></td>
-                        </tr>
-                    `;
-                });
+
+                if (data.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="4" class="empty">No hay productos registrados.</td></tr>';
+                } else {
+                    tbody.innerHTML = data.map(p => {
+                        let clase = 'b-ok', texto = p.stock;
+                        if (p.stock === 0) { clase = 'b-bad'; texto = 'Agotado'; }
+                        else if (p.stock <= STOCK_BAJO) { clase = 'b-warn'; texto = p.stock + ' · bajo'; }
+                        return `
+                            <tr>
+                                <td>${p.idProducto}</td>
+                                <td>${esc(p.nombre)}</td>
+                                <td class="num">${moneda.format(p.precio)}</td>
+                                <td class="num"><span class="badge ${clase}">${texto}</span></td>
+                            </tr>`;
+                    }).join('');
+                }
+
+                document.getElementById('statTotal').innerText = data.length;
+                document.getElementById('statUnidades').innerText =
+                    data.reduce((a, p) => a + (p.stock || 0), 0).toLocaleString('es-CO');
+                document.getElementById('statBajo').innerText =
+                    data.filter(p => p.stock <= STOCK_BAJO).length;
             } catch (err) {
                 console.error('Error al cargar productos:', err);
+                tbody.innerHTML = `<tr><td colspan="4" class="empty">No se pudo cargar productos: ${esc(err.message)}</td></tr>`;
             }
         }
 
@@ -106,10 +323,17 @@
             const idCliente = parseInt(document.getElementById('idCliente').value);
             const idProducto = parseInt(document.getElementById('idProducto').value);
             const cantidad = parseInt(document.getElementById('cantidad').value);
+            const msg = document.getElementById('mensajePedido');
+
+            if (!idCliente || !idProducto || !cantidad || cantidad < 1) {
+                msg.className = 'err';
+                msg.innerText = 'Selecciona cliente y producto, e ingresa una cantidad válida.';
+                return;
+            }
 
             const payload = {
-                pedido: { cliente: { idCliente: idCliente } },
-                detalles: [{ producto: { idProducto: idProducto }, cantidad: cantidad }]
+                pedido: { idCliente: idCliente },
+                detalles: [{ idProducto: idProducto, cantidad: cantidad }]
             };
 
             try {
@@ -119,10 +343,14 @@
                     body: JSON.stringify(payload)
                 });
                 const result = await res.json();
-                document.getElementById('mensajePedido').innerText = result.mensaje || result.error;
+                msg.className = res.ok ? 'ok' : 'err';
+                msg.innerText = (res.ok ? '✔ ' : '✖ ') + (result.mensaje || result.error);
+                if (res.ok) document.getElementById('cantidad').value = '';
                 cargarProductos(); // Refrescar inventario automáticamente
+                cargarListas();    // y las listas (stock actualizado)
             } catch (err) {
-                document.getElementById('mensajePedido').innerText = 'Error al procesar pedido';
+                msg.className = 'err';
+                msg.innerText = 'Error al procesar pedido: ' + err.message;
             }
         }
 
@@ -130,26 +358,36 @@
         async function consultarHistorial() {
             const idCliente = document.getElementById('buscarClienteId').value;
             if (!idCliente) return;
+            const tbody = document.querySelector('#tablaHistorial tbody');
 
             try {
-                const res = await fetch(`${API_URL}/pedidos/historial/${idCliente}`);
+                const res = await fetch(`${API_URL}/historial-entregas/cliente/${idCliente}`);
+                if (!res.ok) throw new Error('HTTP ' + res.status);
                 const data = await res.json();
-                const tbody = document.querySelector('#tablaHistorial tbody');
-                tbody.innerHTML = '';
-                data.forEach(h => {
-                    tbody.innerHTML += `
+
+                if (data.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="4" class="empty">Este cliente no tiene entregas registradas.</td></tr>';
+                    return;
+                }
+                tbody.innerHTML = data.map(h => {
+                    const fecha = h.fechaEntrega
+                        ? new Date(h.fechaEntrega).toLocaleString('es-CO', { dateStyle: 'medium', timeStyle: 'short' })
+                        : 'N/A';
+                    return `
                         <tr>
                             <td>${h.idEntrega}</td>
-                            <td>${h.pedido ? h.pedido.idPedido : 'N/A'}</td>
-                            <td>${h.fechaEntrega}</td>
-                            <td>${h.estadoEntrega}</td>
-                        </tr>
-                    `;
-                });
+                            <td>${h.idPedido ?? 'N/A'}</td>
+                            <td>${fecha}</td>
+                            <td>${badgeEstado(h.estadoEntrega)}</td>
+                        </tr>`;
+                }).join('');
             } catch (err) {
                 console.error('Error al consultar historial:', err);
+                tbody.innerHTML = `<tr><td colspan="4" class="empty">No se pudo consultar: ${esc(err.message)}</td></tr>`;
             }
         }
+
+        window.addEventListener('DOMContentLoaded', () => { cargarListas(); cargarProductos(); });
     </script>
 </body>
 </html>

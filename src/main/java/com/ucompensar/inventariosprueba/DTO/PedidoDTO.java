@@ -3,30 +3,28 @@ package com.ucompensar.inventariosprueba.DTO;
 import java.time.LocalDateTime;
 
 public class PedidoDTO {
-    
-    private Long id;
+
+    private Long idPedido;
     private Long idCliente;
-    private String nombreCliente;
     private LocalDateTime fechaPedido;
     private String estado;
 
-    // constructor
-    public PedidoDTO(Long id, Long idCliente, String nombreCliente, LocalDateTime fechaPedido, String estado) {
-        this.id = id;
+    public PedidoDTO() {
+    }
+
+    public PedidoDTO(Long idPedido, Long idCliente, LocalDateTime fechaPedido, String estado) {
+        this.idPedido = idPedido;
         this.idCliente = idCliente;
-        this.nombreCliente = nombreCliente;
         this.fechaPedido = fechaPedido;
         this.estado = estado;
     }
 
-    // getters and setters
-
-    public Long getId() {
-        return id;
+    public Long getIdPedido() {
+        return idPedido;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setIdPedido(Long idPedido) {
+        this.idPedido = idPedido;
     }
 
     public Long getIdCliente() {
@@ -35,14 +33,6 @@ public class PedidoDTO {
 
     public void setIdCliente(Long idCliente) {
         this.idCliente = idCliente;
-    }
-
-    public String getNombreCliente() {
-        return nombreCliente;
-    }
-
-    public void setNombreCliente(String nombreCliente) {
-        this.nombreCliente = nombreCliente;
     }
 
     public LocalDateTime getFechaPedido() {
@@ -60,6 +50,4 @@ public class PedidoDTO {
     public void setEstado(String estado) {
         this.estado = estado;
     }
-
-    
 }

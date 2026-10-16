@@ -12,7 +12,7 @@ public class JPAUtil {
 
     //variable para conectar EntityManager con la unidad de persistencia
     private static final EntityManagerFactory factory =
-            Persistence.createEntityManagerFactory("dbinventarioprueba");
+            Persistence.createEntityManagerFactory("InventarioPU");
 
     //conexion
     public static EntityManagerFactory getEntityManagerFactory() {

@@ -1,50 +1,42 @@
 package com.ucompensar.inventariosprueba.controler;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ucompensar.inventariosprueba.DTO.DetallePedidoDTO;
 import com.ucompensar.inventariosprueba.DTO.PedidoDTO;
 import com.ucompensar.inventariosprueba.service.PedidoService;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import java.util.List;
 
-@WebServlet("/api/pedidos")
-public class PedidoController extends HttpServlet {
+@Path("/pedidos")
+@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
+public class PedidoController {
 
-    private final PedidoService service = new PedidoService();
-    private final ObjectMapper mapper = new ObjectMapper();
+    private PedidoService pedidoService = new PedidoService();
 
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-            throws IOException {
-
-        resp.setContentType("application/json");
-        resp.setCharacterEncoding("UTF-8");
-
-        mapper.writeValue(resp.getWriter(), service.listarTodosDTO());
+    public static class PedidoRequest {
+        public PedidoDTO pedido;
+        public List<DetallePedidoDTO> detalles;
     }
 
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-            throws IOException {
-        PedidoDTO dto = mapper.readValue(req.getInputStream(), PedidoDTO.class);
-        service.crear(dto);
-        resp.setStatus(HttpServletResponse.SC_CREATED);
-    }
+    @POST
+    public Response registrarPedido(PedidoRequest request) {
+        if (request == null || request.pedido == null || request.detalles == null) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                           .entity("{\"error\":\"Datos de pedido o detalles incompletos\"}")
+                           .build();
+        }
 
-    @Override
-    protected void doPut(HttpServletRequest req, HttpServletResponse resp)
-            throws IOException {
-        PedidoDTO dto = mapper.readValue(req.getInputStream(), PedidoDTO.class);
-        service.actualizar(dto);
-        resp.setStatus(HttpServletResponse.SC_OK);
-    }
-
-    @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) {
-        String id = req.getParameter("id");
-        service.eliminar(Long.parseLong(id));
-        resp.setStatus(HttpServletResponse.SC_NO_CONTENT);
+        boolean exito = pedidoService.registrarPedidoConStock(request.pedido, request.detalles);
+        if (exito) {
+            return Response.status(Response.Status.CREATED)
+                           .entity("{\"mensaje\":\"Pedido creado y stock actualizado correctamente\"}")
+                           .build();
+        } else {
+            return Response.status(Response.Status.BAD_REQUEST)
+                           .entity("{\"error\":\"No se pudo procesar el pedido (verifique stock suficiente o existencia del cliente)\"}")
+                           .build();
+        }
     }
 }

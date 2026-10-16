@@ -1,30 +1,30 @@
 package com.ucompensar.inventariosprueba.DTO;
 
 public class ClienteDTO {
-    
-    private Long id;
+
+    private Long idCliente;
     private String nombre;
     private String direccion;
     private String telefono;
     private String email;
 
-    // constructor
-    public ClienteDTO(Long id, String nombre, String direccion, String telefono, String email) {
-        this.id = id;
+    public ClienteDTO() {
+    }
+
+    public ClienteDTO(Long idCliente, String nombre, String direccion, String telefono, String email) {
+        this.idCliente = idCliente;
         this.nombre = nombre;
         this.direccion = direccion;
         this.telefono = telefono;
         this.email = email;
     }
 
-    // getters and setters
-    
-    public Long getId() {
-        return id;
+    public Long getIdCliente() {
+        return idCliente;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setIdCliente(Long idCliente) {
+        this.idCliente = idCliente;
     }
 
     public String getNombre() {
@@ -59,5 +59,3 @@ public class ClienteDTO {
         this.email = email;
     }
 }
- 
-   

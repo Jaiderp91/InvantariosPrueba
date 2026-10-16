@@ -1,50 +1,40 @@
 package com.ucompensar.inventariosprueba.controler;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ucompensar.inventariosprueba.DTO.ProductoDTO;
 import com.ucompensar.inventariosprueba.service.ProductoService;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import java.util.List;
 
-@WebServlet("/api/productos")
-public class ProductoController extends HttpServlet {
+@Path("/productos")
+@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
+public class ProductoController {
 
-    private final ProductoService service = new ProductoService();
-    private final ObjectMapper mapper = new ObjectMapper();
+    private ProductoService productoService = new ProductoService();
 
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-            throws IOException {
-
-        resp.setContentType("application/json");
-        resp.setCharacterEncoding("UTF-8");
-
-        mapper.writeValue(resp.getWriter(), service.listarTodosDTO());
+    @GET
+    public List<ProductoDTO> listar() {
+        return productoService.listarProductos();
     }
 
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-            throws IOException {
-        ProductoDTO dto = mapper.readValue(req.getInputStream(), ProductoDTO.class);
-        service.crear(dto);
-        resp.setStatus(HttpServletResponse.SC_CREATED);
+    @GET
+    @Path("/{id}")
+    public Response obtenerPorId(@PathParam("id") Long id) {
+        ProductoDTO dto = productoService.obtenerPorId(id);
+        if (dto != null) {
+            return Response.ok(dto).build();
+        }
+        return Response.status(Response.Status.NOT_FOUND).entity("{\"error\":\"Producto no encontrado\"}").build();
     }
 
-    @Override
-    protected void doPut(HttpServletRequest req, HttpServletResponse resp)
-            throws IOException {
-        ProductoDTO dto = mapper.readValue(req.getInputStream(), ProductoDTO.class);
-        service.actualizar(dto);
-        resp.setStatus(HttpServletResponse.SC_OK);
-    }
-
-    @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) {
-        String id = req.getParameter("id");
-        service.eliminar(Long.parseLong(id));
-        resp.setStatus(HttpServletResponse.SC_NO_CONTENT);
+    @POST
+    public Response crear(ProductoDTO dto) {
+        boolean creado = productoService.crearProducto(dto);
+        if (creado) {
+            return Response.status(Response.Status.CREATED).entity("{\"mensaje\":\"Producto creado exitosamente\"}").build();
+        }
+        return Response.status(Response.Status.BAD_REQUEST).entity("{\"error\":\"No se pudo crear el producto\"}").build();
     }
 }

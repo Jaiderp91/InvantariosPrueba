@@ -1,23 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence version="3.0" xmlns="https://jakarta.ee/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd">
-  <!-- para llamarlo recordar que se comunica con InventarioPU como lo nombramos -->
-  <persistence-unit name="dbinventarioprueba" transaction-type="RESOURCE_LOCAL">
+  
+  <persistence-unit name="InventarioPU" transaction-type="RESOURCE_LOCAL">
     <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-    <!-- Recordar que lo que esta en entity tambien tiene que estar aca  como las que voy a poner a continuacion-->
-    <class>com.ucompensar.veterinaria.model.entity.Producto</class>
-    <class>com.ucompensar.veterinaria.model.entity.Clientes</class>
-    <class>com.ucompensar.veterinaria.model.entity.Pedidos</class>
-    <class>com.ucompensar.veterinaria.model.entity.Proveedores</class>
-    <class>com.ucompensar.veterinaria.model.entity.HistorialEntregas</class>
-    <class>com.ucompensar.veterinaria.model.entity.DetallesPedidos</class>
     
-    <class>JPAUtil.java</class>
+    <!-- Entidades del proyecto en plural -->
+    <class>com.ucompensar.inventariosprueba.model.entity.Productos</class>
+    <class>com.ucompensar.inventariosprueba.model.entity.Clientes</class>
+    <class>com.ucompensar.inventariosprueba.model.entity.Pedidos</class>
+    <class>com.ucompensar.inventariosprueba.model.entity.Proveedores</class>
+    <class>com.ucompensar.inventariosprueba.model.entity.HistorialEntregas</class>
+    <class>com.ucompensar.inventariosprueba.model.entity.DetallesPedidos</class>
+
     <properties>
-      <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/dbinventarioprueba?useSSL=false&amp;serverTimezone=UTC"/>
-      <property name="javax.persistence.jdbc.user" value="root"/>
-      <property name="javax.persistence.jdbc.password" value=""/>
-      <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+      <!-- Datos de Conexión JDBC -->
+      <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/dbinventarioprueba?createDatabaseIfNotExist=true&amp;useSSL=false&amp;allowPublicKeyRetrieval=true&amp;serverTimezone=UTC"/>
+      <property name="jakarta.persistence.jdbc.user" value="root"/>
+      <property name="jakarta.persistence.jdbc.password" value=""/>
+      <property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+      
+      <!-- Generación automática del esquema (una sola propiedad).
+           "update" crea las tablas si no existen y conserva los datos.
+           Usar "create" o "drop-and-create" borra TODO en cada arranque. -->
       <property name="hibernate.hbm2ddl.auto" value="update"/>
+      <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
       <property name="hibernate.show_sql" value="true"/>
       <property name="hibernate.format_sql" value="true"/>
     </properties>

@@ -6,13 +6,13 @@ import com.ucompensar.inventariosprueba.model.entity.Pedidos;
 import com.ucompensar.inventariosprueba.model.entity.Productos;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
+import com.ucompensar.inventariosprueba.util.JPAUtil;
 import java.time.LocalDateTime;
 import java.util.List;
 
 public class PedidoDAO {
 
-    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("InventarioPU");
+    private EntityManagerFactory emf = JPAUtil.getEntityManagerFactory();
 
     public boolean registrarPedidoConStock(Pedidos pedido, List<DetallesPedidos> detalles) {
         EntityManager em = emf.createEntityManager();

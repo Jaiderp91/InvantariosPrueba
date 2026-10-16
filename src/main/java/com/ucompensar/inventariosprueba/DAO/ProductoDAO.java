@@ -3,12 +3,12 @@ package com.ucompensar.inventariosprueba.DAO;
 import com.ucompensar.inventariosprueba.model.entity.Productos;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
+import com.ucompensar.inventariosprueba.util.JPAUtil;
 import java.util.List;
 
 public class ProductoDAO {
 
-    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("InventarioPU");
+    private EntityManagerFactory emf = JPAUtil.getEntityManagerFactory();
 
     public boolean crear(Productos producto) {
         EntityManager em = emf.createEntityManager();

@@ -1,28 +1,28 @@
 package com.ucompensar.inventariosprueba.DTO;
 
 public class ProveedorDTO {
-    
-    private Long id;
+
+    private Long idProveedor;
     private String nombre;
     private String contacto;
     private String telefono;
 
-    // constructor
-    public ProveedorDTO(Long id, String nombre, String contacto, String telefono) {
-        this.id = id;
+    public ProveedorDTO() {
+    }
+
+    public ProveedorDTO(Long idProveedor, String nombre, String contacto, String telefono) {
+        this.idProveedor = idProveedor;
         this.nombre = nombre;
         this.contacto = contacto;
         this.telefono = telefono;
     }
 
-    // getters and setters
-
-    public Long getId() {
-        return id;
+    public Long getIdProveedor() {
+        return idProveedor;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setIdProveedor(Long idProveedor) {
+        this.idProveedor = idProveedor;
     }
 
     public String getNombre() {
@@ -48,6 +48,4 @@ public class ProveedorDTO {
     public void setTelefono(String telefono) {
         this.telefono = telefono;
     }
-
-    
 }

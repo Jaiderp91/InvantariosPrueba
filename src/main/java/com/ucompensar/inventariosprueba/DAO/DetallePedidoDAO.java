@@ -3,12 +3,12 @@ package com.ucompensar.inventariosprueba.DAO;
 import com.ucompensar.inventariosprueba.model.entity.DetallesPedidos;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
+import com.ucompensar.inventariosprueba.util.JPAUtil;
 import java.util.List;
 
 public class DetallePedidoDAO {
 
-    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("InventarioPU");
+    private EntityManagerFactory emf = JPAUtil.getEntityManagerFactory();
 
     public List<DetallesPedidos> obtenerPorPedido(Long idPedido) {
         EntityManager em = emf.createEntityManager();
