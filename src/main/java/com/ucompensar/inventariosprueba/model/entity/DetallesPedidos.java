@@ -1,6 +1,7 @@
 package com.ucompensar.inventariosprueba.model.entity;
 
 import jakarta.persistence.*;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "detalle_pedido")
@@ -19,6 +20,9 @@ public class DetallesPedidos {
     private Productos producto;    
 
     private Integer cantidad;
+
+    @Column(name = "precio_unitario")
+    private BigDecimal precioUnitario;
 
     // Getters y Setters
 
@@ -54,5 +58,11 @@ public class DetallesPedidos {
         this.cantidad = cantidad;
     }
 
-    
-}
+    public BigDecimal getPrecioUnitario() {
+        return precioUnitario;
+    }
+
+    public void setPrecioUnitario(BigDecimal precioUnitario) {
+        this.precioUnitario = precioUnitario;
+    }
+    }
